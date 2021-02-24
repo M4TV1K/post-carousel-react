@@ -37,11 +37,16 @@ const Carousel = ({ looped = false, children }) => {
   }, [scrolling]);
 
   const stopScrolling = () => {
-    const slide = Math.floor(carouselRef.current.scrollLeft / width) - 1;
+    let slide = Math.floor(carouselRef.current.scrollLeft / width);
+    if (looped) slide -= 1;
     setActivePoint(slide);
     if (looped && slide === slides) {
       setActivePoint(0);
       carouselRef.current.scrollLeft = width;
+    }
+    else if (looped && slide === -1) {
+      setActivePoint(slides - 1);
+      carouselRef.current.scrollLeft = width * slides;
     }
     setScrollLeft(carouselRef.current.scrollLeft);
     setPreviousScroll(carouselRef.current.scrollLeft);
@@ -105,6 +110,7 @@ const Carousel = ({ looped = false, children }) => {
   const scrollToSlide = (slide) => {
     if (!animation) {
       setAnimation(true);
+      if (looped) slide += 1;
       const scrollTo = slide * width;
       if (scrollTo > previousScroll) scrollCarousel(scrollTo, true);
       else if (scrollTo < previousScroll) scrollCarousel(scrollTo, false);

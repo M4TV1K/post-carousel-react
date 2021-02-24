@@ -33,7 +33,7 @@ const App = () => {
       </Content>
 
       <Content>
-        <div>
+        <div style={{width: '90%'}}>
           <h1>Dear Diary!</h1>
           <p>My life is great, and I love this day, it makes me feel fulfilled or something, I have perfect...</p>
         </div>
