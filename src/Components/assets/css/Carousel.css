@@ -1,0 +1,67 @@
+
+.carousel-container {
+    border: 1px solid black;
+    margin-top: 20vh;
+    width: 500px;
+    height: 500px;
+    display: flex;
+    overflow: hidden;
+    flex-flow: row nowrap;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+.carousel-container::-webkit-scrollbar {
+    display: none;
+}
+
+.carousel-interface {
+    width: 500px;
+    height: 500px;
+    position: absolute;
+    z-index: 10;
+    display: flex;
+    flex-flow: column nowrap;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.nav-buttons {
+    margin-top: 47.5%;
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+}
+
+.nav-button {
+    background-color: whitesmoke;
+    color: cornflowerblue;
+    width: 1.75vw;
+    height: 1.75vw;
+    font-size: 1vw;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 100px;
+    cursor: pointer;
+}
+
+.progress-bar {;
+    display: flex;
+}
+
+.progress-point {
+    margin: 0 4px;
+    font-size: 25px;
+    color: lightslategrey;
+    cursor: pointer;
+}
+
+.active-point {
+    color: cornflowerblue;
+    cursor: default;
+}
