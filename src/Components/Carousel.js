@@ -1,4 +1,4 @@
-
+/* eslint-disable react-hooks/exhaustive-deps */
 import { useState, useEffect, useRef } from "react";
 import './assets/css/Carousel.css';
 
@@ -107,10 +107,10 @@ const Carousel = ({ looped = false, children }) => {
     }
   };
 
-  window.addEventListener(('mouseup'),() => {
+  document.addEventListener(('mouseup'),() => {
     setScrolling(false);
   });
-  window.addEventListener(('touchend'),() => {
+  document.addEventListener(('touchend'),() => {
     setScrolling(false);
   });
 
