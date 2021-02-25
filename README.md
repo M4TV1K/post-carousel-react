@@ -1,70 +1,109 @@
-# Getting Started with Create React App
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+# Features
 
-## Available Scripts
+1. Carousel accepts one argument **looped**. If the loop property is true
+then carousel becomes looped, and it can be scrolled "infinitely" in a circle.
+2. There are arrows allowing sliding to next or previous image/slide.
+3. Progress bar in the bottom of the carousel indicates the current opened
+image/slide. By clicking on any of the point, carousel will be scrolled
+to selected slide
+4. Carousel is adaptable for both desktop and mobile devices.
 
-In the project directory, you can run:
+P.S. It is possible to modify Carousel in order it to meet any needs.
+To show its possibilities I decided to make it square and centralize
+content passed to it.
 
-### `yarn start`
+# Run application
+To run application, it is enough to open index.html file in a desired browser.
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+# Building application
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+After setting up the environment and writing all the necessary React code,
+open terminal, navigate to project folder and execute following command
 
-### `yarn test`
+**npm run build**
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+It will run "webpack --mode development" command that will build 
+the main.js file representing the web app you have built! 
 
-### `yarn build`
+# Setting up the environment
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+**Notice**: all commands should be executed in the command line!  
+**Prerequisites**: You should have installed Node.js with npm (new version of
+Node.js already contains npm)
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+To setting up the environment we can simply run 'create-react-app' command in command line.  
+But if you want to make it manually, here is a complete guide down below :)
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+To begin with we should set up the node environment. It gives all useful
+libraries and access to v8-compile-engine that will compile all the Js code for us.
 
-### `yarn eject`
+To do this, create empty folder where will be the desired project,
+and navigate to it in command line and enter following command:
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+**npm init**
+ 
+After setting up the node_modules, we may install all necessary libraries to
+build the React project
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+### Installing react libraries
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+**npm install --save-dev react**  
+**npm install --save-dev react-dom**
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+### Installing babel
+Babel allows us to interpret JavaScript code to any desired version of Js code.
+In our case Babel will interpret React code to simple javascript code
+that will be used by Browser to simulate web-app behaviour
 
-## Learn More
+**npm install --save-dev @babel/core**  
+**npm install --save-dev @babel/preset-react**  
+**npm install --save-dev babel-loader**
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+### Installing webpack
+Webpack is used for building project for us, it will use
+babel-loader to compile all the js files, and simultaneously
+style-loader/css-loader to compile css files and all of them
+will be merged to one **main.js** file
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+**npm install --save-dev webpack**
+**npm install --save-dev webpack-cli**
 
-### Code Splitting
+### Final preparation 
+After the installation, we need to create a file **.babelrc** with content
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+{  
+"presets": ["@babel/preset-react"]  
+}
 
-### Analyzing the Bundle Size
+Now we need to create **webpack.config.js** with  
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+module.exports = {  
+    module: {  
+        rules: [  
+            {  
+                test: /\.jsx?$/,  
+                exclude: /node_modules/,  
+                use: {  
+                    loader: "babel-loader"  
+                }  
+            },  
+            {  
+                test: /\.css$/i,  
+                use: ["style-loader", "css-loader"]  
+            }  
+        ]  
+    }  
+};  
 
-### Making a Progressive Web App
+Also, we need to add following "build" line to scripts in **package.json**
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
+"scripts": {  
+    "test": "echo \"Error: no test specified\" && exit 1",   
+    **"build": "webpack --mode development"**  
+},
 
-### Advanced Configuration
+Finally, we need to create **index.html** file which will load all the compiled
+scripts by webpack. (look into **index.html** file).
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `yarn build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+End!

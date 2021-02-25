@@ -2,7 +2,6 @@ import Carousel from "./Components/Carousel";
 import Content from "./Components/Content";
 import './Components/assets/css/App.css';
 
-
 const App = () => {
   return (
       <div>
@@ -11,7 +10,7 @@ const App = () => {
             <div style={{width: '90%'}}>
               <h1>Literally any HTML CONTENT</h1>
               <p>You can wrap anything in this container 'Content'</p>
-              <p>But it should fit the size of the carousel itself, because overflow is hidden anyway</p>
+              <p>But it should fit the size of the carousel itself, overflow is hidden anyway</p>
             </div>
           </Content>
 
