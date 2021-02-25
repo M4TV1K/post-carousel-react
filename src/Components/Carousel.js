@@ -11,16 +11,20 @@ const Carousel = ({ looped = false, children }) => {
   const [scrolled, setScrolled] = useState(0);
   const [scrollLeft, setScrollLeft] = useState(0);
   const [previousScroll, setPreviousScroll] = useState(0);
-  const [activePoint, setActivePoint] = useState(0);
+  const [curSlide, setCurSlide] = useState(0);
   const [slides, setSlides] = useState(0);
   const carouselRef = useRef();
+  const interfaceRef = useRef();
 
   useEffect(() => {
     setWidth(carouselRef.current.clientWidth);
     setSlides(children.length);
-    if (looped) {
-      carouselRef.current.scrollLeft = width;
-      stopScrolling();
+    if (width !== 0) {
+      interfaceRef.current.style.backgroundColor = 'transparent';
+      if (looped) {
+        carouselRef.current.scrollLeft = width * (curSlide + 1);
+        stopScrolling();
+      }
     }
   }, [width]);
 
@@ -28,10 +32,10 @@ const Carousel = ({ looped = false, children }) => {
     if (!scrolling) {
       const slide = Math.floor(scrollLeft / width);
       if (scrollLeft > previousScroll) {
-        scrollCarousel(width + (width * slide), true);
+        scrollCarouselTo(width + (width * slide), true);
       }
       else if (scrollLeft < previousScroll) {
-        scrollCarousel(scrollLeft - width, false);
+        scrollCarouselTo(scrollLeft - width, false);
       }
     }
   }, [scrolling]);
@@ -39,13 +43,13 @@ const Carousel = ({ looped = false, children }) => {
   const stopScrolling = () => {
     let slide = Math.floor(carouselRef.current.scrollLeft / width);
     if (looped) slide -= 1;
-    setActivePoint(slide);
+    setCurSlide(slide);
     if (looped && slide === slides) {
-      setActivePoint(0);
+      setCurSlide(0);
       carouselRef.current.scrollLeft = width;
     }
     else if (looped && slide === -1) {
-      setActivePoint(slides - 1);
+      setCurSlide(slides - 1);
       carouselRef.current.scrollLeft = width * slides;
     }
     setScrollLeft(carouselRef.current.scrollLeft);
@@ -67,7 +71,7 @@ const Carousel = ({ looped = false, children }) => {
     });
   }
 
-  const scrollCarousel = (scrollTo, direction) => {
+  const scrollCarouselTo = (scrollTo, direction) => {
     setAnimation(true);
     let scrollDifference = Math.abs(scrollTo - scrollLeft);
     if (!direction) scrollDifference += scrollLeft - previousScroll;
@@ -83,28 +87,43 @@ const Carousel = ({ looped = false, children }) => {
     setAnimation(true);
     scrollingAnimation(width, false);
   }
-
+  
   window.addEventListener('resize', () => {
     setWidth(carouselRef.current.clientWidth);
+    if (!looped) {
+      carouselRef.current.scrollLeft = curSlide * carouselRef.current.clientWidth;
+      setScrollLeft(carouselRef.current.scrollLeft);
+    }
   });
 
   const onMouseDown = (event) => {
     if (!animation) {
       setScrolling(true);
-      setScrolled(event.clientX);
+      let currentScrolled = event.clientX !== undefined
+          ? event.clientX
+          : Math.floor(event.touches[0].clientX)
+      ;
+      setScrolled(currentScrolled);
     }
   };
 
   window.addEventListener(('mouseup'),() => {
     setScrolling(false);
   });
+  window.addEventListener(('touchend'),() => {
+    setScrolling(false);
+  });
 
   const onMouseMove = (event) => {
-      if (scrolling) {
-        carouselRef.current.scrollLeft = scrollLeft - event.clientX + scrolled;
-        setScrollLeft(carouselRef.current.scrollLeft);
-        setScrolled(event.clientX);
-      }
+    if (scrolling) {
+      let currentScrolled = event.clientX !== undefined
+          ? event.clientX
+          : Math.floor(event.touches[0].clientX)
+      ;
+      carouselRef.current.scrollLeft = scrollLeft - currentScrolled + scrolled;
+      setScrollLeft(carouselRef.current.scrollLeft);
+      setScrolled(currentScrolled);
+    }
   };
 
   const scrollToSlide = (slide) => {
@@ -112,8 +131,8 @@ const Carousel = ({ looped = false, children }) => {
       setAnimation(true);
       if (looped) slide += 1;
       const scrollTo = slide * width;
-      if (scrollTo > previousScroll) scrollCarousel(scrollTo, true);
-      else if (scrollTo < previousScroll) scrollCarousel(scrollTo, false);
+      if (scrollTo > previousScroll) scrollCarouselTo(scrollTo, true);
+      else if (scrollTo < previousScroll) scrollCarouselTo(scrollTo, false);
     }
   };
 
@@ -122,7 +141,7 @@ const Carousel = ({ looped = false, children }) => {
     for (let slide = 0; slide < children.length; ++slide) {
       points.push(
           <p
-              className={`progress-point ${activePoint === slide ? 'active-point' : ''}`}
+              className={`progress-point ${curSlide === slide ? 'active-point' : ''}`}
               onClick={() => scrollToSlide(slide)}
               key={slide}
           >
@@ -139,8 +158,10 @@ const Carousel = ({ looped = false, children }) => {
           ref={carouselRef}
           onMouseDown={onMouseDown}
           onMouseMove={onMouseMove}
+          onTouchStart={onMouseDown}
+          onTouchMove={onMouseMove}
       >
-        <article className='carousel-interface'>
+        <article className='carousel-interface' ref={interfaceRef}>
           <section className='nav-buttons'>
             <div className='nav-button' onClick={prevSlide}>&#8592;</div>
             <div className='nav-button' onClick={nextSlide}>&#8594;</div>

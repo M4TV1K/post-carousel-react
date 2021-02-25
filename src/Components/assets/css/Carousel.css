@@ -1,11 +1,14 @@
 
+.carousel-container, .carousel-interface {
+    width: 40vw;
+    height: 40vw;
+}
+
 .carousel-container {
     border: 1px solid black;
-    margin-top: 20vh;
-    width: 500px;
-    height: 500px;
-    display: flex;
+    margin-top: 10vh;
     overflow: hidden;
+    display: flex;
     flex-flow: row nowrap;
     scrollbar-width: none;
     -ms-overflow-style: none;
@@ -20,14 +23,13 @@
 }
 
 .carousel-interface {
-    width: 500px;
-    height: 500px;
     position: absolute;
     z-index: 10;
     display: flex;
     flex-flow: column nowrap;
     justify-content: space-between;
     align-items: center;
+    background-color: white;
 }
 
 .nav-buttons {
@@ -64,4 +66,16 @@
 .active-point {
     color: cornflowerblue;
     cursor: default;
+}
+
+@media screen and (max-width: 1024px) {
+    .carousel-container {
+        margin-top: 2vh;
+        border-left: 0 solid;
+        border-right: 0 solid;
+    }
+    .carousel-container, .carousel-interface {
+        width: 100vw;
+        height: 100vw;
+    }
 }
