@@ -1,6 +1,7 @@
-/* eslint-disable react-hooks/exhaustive-deps */
+
 import { useState, useEffect, useRef } from "react";
 import './assets/css/Carousel.css';
+import ProgressBar from "./ProgressBar";
 
 const SCROLLING_SPEED = 50;
 
@@ -99,7 +100,7 @@ const Carousel = ({ looped = false, children }) => {
   const onMouseDown = (event) => {
     if (!animation) {
       setScrolling(true);
-      let currentScrolled = event.clientX !== undefined
+      const currentScrolled = event.clientX !== undefined
           ? event.clientX
           : Math.floor(event.touches[0].clientX)
       ;
@@ -107,16 +108,16 @@ const Carousel = ({ looped = false, children }) => {
     }
   };
 
-  document.addEventListener(('mouseup'),() => {
+  window.addEventListener(('mouseup'),() => {
     setScrolling(false);
   });
-  document.addEventListener(('touchend'),() => {
+  window.addEventListener(('touchend'),() => {
     setScrolling(false);
   });
 
   const onMouseMove = (event) => {
     if (scrolling) {
-      let currentScrolled = event.clientX !== undefined
+      const currentScrolled = event.clientX !== undefined
           ? event.clientX
           : Math.floor(event.touches[0].clientX)
       ;
@@ -136,21 +137,9 @@ const Carousel = ({ looped = false, children }) => {
     }
   };
 
-  const displayPoints = () => {
-    let points = [];
-    for (let slide = 0; slide < children.length; ++slide) {
-      points.push(
-          <p
-              className={`progress-point ${curSlide === slide ? 'active-point' : ''}`}
-              onClick={() => scrollToSlide(slide)}
-              key={slide}
-          >
-            &bull;
-          </p>
-      );
-    }
-    return points;
-  };
+  const wrappedChildren = children.map((child, index) => {
+    return <div className='container' key={index}>{child}</div>
+  });
 
   return (
       <article
@@ -166,13 +155,21 @@ const Carousel = ({ looped = false, children }) => {
             <div className='nav-button' onClick={prevSlide}>&#8592;</div>
             <div className='nav-button' onClick={nextSlide}>&#8594;</div>
           </section>
-          <section className='progress-bar'>
-            { displayPoints() }
+          <section className={'slide-counter-container'}>
+            <div className='slide-counter'>
+              {(curSlide + 1) + '/' + children.length}
+            </div>
           </section>
+
+          <ProgressBar
+              amount={children.length}
+              selected={curSlide}
+              onClickPoint={scrollToSlide}
+          />
         </article>
-        { looped ? children[children.length - 1] : null}
-        { children }
-        { looped ? children[0] : null }
+        { looped ? wrappedChildren[wrappedChildren.length - 1] : null}
+        { wrappedChildren }
+        { looped ? wrappedChildren[0] : null }
       </article>
   );
 };

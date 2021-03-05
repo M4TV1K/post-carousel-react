@@ -1,0 +1,26 @@
+.progress-bar {;
+    display: flex;
+    overflow-x: hidden;
+    width: 88px;
+}
+
+.small-bar {
+    display: flex;
+}
+
+.progress-point {
+    margin: 0 4px;
+    font-size: 25px;
+    color: lightslategrey;
+    cursor: pointer;
+}
+
+.active-point {
+    color: cornflowerblue;
+    cursor: default;
+}
+
+.small-point {
+    font-size: 17px;
+    margin-top: 5px;
+}
