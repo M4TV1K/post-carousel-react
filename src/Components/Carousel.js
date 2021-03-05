@@ -137,41 +137,50 @@ const Carousel = ({ looped = false, children }) => {
     }
   };
 
-  const wrappedChildren = children.map((child, index) => {
-    return <div className='container' key={index}>{child}</div>
-  });
+  if (children.length !== undefined) {
+    const wrappedChildren = children.map((child, index) => {
+      return <div className='container' key={index}>{child}</div>
+    });
+    return (
+        <article
+            className='carousel-container'
+            ref={carouselRef}
+            onMouseDown={onMouseDown}
+            onMouseMove={onMouseMove}
+            onTouchStart={onMouseDown}
+            onTouchMove={onMouseMove}
+        >
+          <article className='carousel-interface' ref={interfaceRef}>
+            <section className='nav-buttons'>
+              <div className='nav-button' onClick={prevSlide}>&#8592;</div>
+              <div className='nav-button' onClick={nextSlide}>&#8594;</div>
+            </section>
+            <section className={'slide-counter-container'}>
+              <div className='slide-counter'>
+                {(curSlide + 1) + '/' + children.length}
+              </div>
+            </section>
 
-  return (
-      <article
-          className='carousel-container'
-          ref={carouselRef}
-          onMouseDown={onMouseDown}
-          onMouseMove={onMouseMove}
-          onTouchStart={onMouseDown}
-          onTouchMove={onMouseMove}
-      >
-        <article className='carousel-interface' ref={interfaceRef}>
-          <section className='nav-buttons'>
-            <div className='nav-button' onClick={prevSlide}>&#8592;</div>
-            <div className='nav-button' onClick={nextSlide}>&#8594;</div>
-          </section>
-          <section className={'slide-counter-container'}>
-            <div className='slide-counter'>
-              {(curSlide + 1) + '/' + children.length}
-            </div>
-          </section>
-
-          <ProgressBar
-              amount={children.length}
-              selected={curSlide}
-              onClickPoint={scrollToSlide}
-          />
+            <ProgressBar
+                amount={children.length}
+                selected={curSlide}
+                onClickPoint={scrollToSlide}
+            />
+          </article>
+          { looped ? wrappedChildren[wrappedChildren.length - 1] : null}
+          { wrappedChildren }
+          { looped ? wrappedChildren[0] : null }
         </article>
-        { looped ? wrappedChildren[wrappedChildren.length - 1] : null}
-        { wrappedChildren }
-        { looped ? wrappedChildren[0] : null }
-      </article>
-  );
+    );
+  }
+  else {
+    return (
+        <article className='carousel-container' ref={carouselRef}>
+          <article className='carousel-interface' ref={interfaceRef}/>
+          <div className='container'>{children}</div>
+        </article>
+    );
+  }
 };
 
 export default Carousel;

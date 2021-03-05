@@ -27,7 +27,7 @@ const ProgressBar = ({ onClickPoint, amount, selected }) => {
   const displayPoints = () => {
     const points = [];
     for (let p = 0; p < amount; ++p) {
-      if (amount > 4) points.push(
+      points.push(
           <p
               className={
                 `progress-point ${p === selected ? 'active-point' : ''}
@@ -36,16 +36,7 @@ const ProgressBar = ({ onClickPoint, amount, selected }) => {
               onClick={() => onClickPoint(p)}
               key={p}
           >&bull;</p>
-        );
-      else {
-        points.push(
-            <p
-                className={`progress-point ${p === selected ? 'active-point' : ''}`}
-                onClick={() => onClickPoint(p)}
-                key={p}
-            >&bull;</p>
-        );
-      }
+      );
     }
     return points;
   };
